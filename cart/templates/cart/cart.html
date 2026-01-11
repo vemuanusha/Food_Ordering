@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="text-center mb-4">🛒 Your Cart</h1>
+
+  {% if items %}
+    <ul class="list-group mb-3">
+      {% for ci in items %}
+        <li class="list-group-item">
+          <div class="d-flex align-items-center justify-content-between">
+
+            <!-- Image and item details -->
+            <div class="d-flex align-items-center">
+              {% if ci.item.image %}
+                <img src="{{ ci.item.image.url }}" class="me-3 rounded" style="width: 80px; height: 60px; object-fit: cover;">
+              {% else %}
+                <img src="https://via.placeholder.com/80x60?text=No+Image" class="me-3 rounded">
+              {% endif %}
+              <div>
+                <strong>{{ ci.item.name }}</strong><br>
+                ₹{{ ci.item.price }} × {{ ci.quantity }}
+              </div>
+            </div>
+
+            <!-- Actions and price -->
+            <div class="text-end">
+              <div class="mb-2">
+                <a href="{% url 'cart:qty' ci.item.id 1 %}" class="btn btn-sm btn-outline-success me-1">➕</a>
+                <a href="{% url 'cart:qty' ci.item.id -1 %}" class="btn btn-sm btn-outline-warning me-1">➖</a>
+                <a href="{% url 'cart:remove' ci.item.id %}" class="btn btn-sm btn-outline-danger">❌</a>
+              </div>
+              <span class="badge bg-primary rounded-pill">₹{{ ci.line_total|floatformat:2 }}</span>
+            </div>
+
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="text-end mb-3">
+      <h5><strong>Total:</strong> ₹{{ total|floatformat:2 }}</h5>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'cart:place' %}" class="btn btn-success me-2">✅ Place Order</a>
+      <a href="{% url 'orders:history' %}" class="btn btn-info text-white">📜 View Orders</a>
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center">Your cart is empty.</div>
+  {% endif %}
+</div>
+{% endblock %}

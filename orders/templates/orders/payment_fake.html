@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container text-center py-5">
+    <h2 class="mb-4">💳 Payment options</h2>
+    <p class="lead">You're about to pay for Order #{{ order.id }}.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <img src="{% static 'images/gpay.jpg' %}" 
+             alt="Google Pay" style="width:150px; margin:20px 0;">
+        <br>
+        <button type="submit" class="btn btn-primary px-4 py-2">
+            ✅ Continue with Google Pay
+        </button>
+    </form>
+    <p class="mt-3 text-muted">
+        If you're sure, click <strong>Pay Now</strong> to complete the order.<br>
+        Or you can <a href="{% url 'orders:history' %}">view your Order History</a> first.
+    </p>
+
+</div>
+
+{% endblock %}

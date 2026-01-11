@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="text-center mb-4">📜 Order History</h1>
+
+{% if orders %}
+    {% for order in orders %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Order #{{ order.id }} — {{ order.placed_at|date:"Y-m-d H:i" }}</span>
+
+                {% if order.is_paid %}
+                    <span class="badge bg-success">✅ Paid</span>
+                {% else %}
+                    <a href="{% url 'orders:simulate_payment' order.id %}" class="btn btn-sm btn-outline-primary">
+                        💳 Pay Now
+                    </a>
+                {% endif %}
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for item in order.items.all %}
+                    <li class="list-group-item">
+                        {{ item.item.name }} × {{ item.quantity }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info text-center">No orders found.</div>
+{% endif %}
+
+{% endblock %}
